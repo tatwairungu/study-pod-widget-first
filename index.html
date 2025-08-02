@@ -227,7 +227,11 @@ timeInput.max = "19:59";
 // Call the function to build form on page load
 buildBookingForm();
 
+// Booking array that will be used during runtime
+    let bookings = [...initialBookings];
 
+    // Global counter for rule violations (Rule 2 and Rule 3)
+    let ruleViolationCount = 0;
 
 // Attach event listener to the form after DOM is built
 document.getElementById("booking-form").addEventListener("submit", function (event) {
@@ -309,12 +313,14 @@ if (currentCount + students.length > 4) {
       if (b.podId === podId && b.time === time && b.students.includes(sid)) {
         ruleViolationCount++; // Count violation
         errorsDiv.textContent = `Student ${sid} is already booked in this pod at this time.`;
+        renderInsights(); // ← Update the UI
         return;
       }
 
       if (b.time === time && b.podId !== podId && b.students.includes(sid)) {
         ruleViolationCount++; // Count violation
         errorsDiv.textContent = `Student ${sid} is already booked in another pod at this time.`;
+        renderInsights(); // ← Update the UI
         return;
       }
     }
@@ -340,14 +346,6 @@ if (currentCount + students.length > 4) {
 });
 
  
-    // Booking array that will be used during runtime
-    let bookings = [...initialBookings];
-
-    // Global counter for rule violations (Rule 2 and Rule 3)
-    let ruleViolationCount = 0;
-
-   
-
 
     // Initialize page with default data
     renderBookingsTable();
